@@ -75,63 +75,6 @@ Dengan venv aktif, jalankan:
 ```powershell
 python pingscan.py
 ```
-
-Perilaku saat dijalankan:
-
-- Akan muncul jendela berjudul `scanning...` yang menampilkan feed kamera.
-- Saat QR terdeteksi, program akan:
-	- Menggambar poligon hijau di sekitar QR
-	- Menampilkan URL absensi pada konsol
-	- Membuka URL di peramban (hanya sekali per payload QR unik)
-- Tutup aplikasi dengan menekan `q`, `Q`, `Esc`, atau Ctrl+C di konsol.
-
-## Catatan & pemecahan masalah
-
-- Kamera tidak dapat diakses / pesan error "Cannot access camera":
-	- Pastikan tidak ada aplikasi lain yang menggunakan webcam.
-	- Di Windows, izinkan akses kamera untuk aplikasi terminal/PowerShell.
-	- Coba ubah indeks kamera: di `pingscan.py` ganti `VideoCapture(0)` menjadi `VideoCapture(1)`.
-
-- Deteksi QR tidak stabil:
-	- Pastikan pencahayaan cukup dan kamera fokus.
-	- Dekatkan atau jauhkan QR sampai terdeteksi.
-	- Jika tetap gagal, pertimbangkan menggunakan `pyzbar` sebagai alternatif.
-
-### Menggunakan pyzbar (opsional)
-
-Jika ingin mencoba `pyzbar`, ubah logika deteksi di `pingscan.py` untuk memakai
-`pyzbar.decode(frame)` kemudian proses objek hasil decode. Perhatikan bahwa `pyzbar`
-bisa memerlukan dependensi sistem di beberapa OS.
-
-## Kontrak singkat
-
-- Input: frame video dari webcam.
-- Output: membuka peramban ke `https://pingfest.id/attendance/check/<QR_DATA>` untuk setiap QR unik.
-- Mode error: kamera tidak dapat diakses, tidak ada QR, atau kegagalan membuka peramban.
-
-## Kasus tepi
-
-- Pemindaian ulang QR yang sama: skrip mencegah membuka URL yang sama berkali-kali dengan
-	menyimpan `opened_urls` di memori selama sesi berjalan.
-- Payload QR sangat panjang/kompleks: detector akan mengembalikan data apa adanya; pastikan payload aman.
-
-## Kontribusi
-
-Ide perbaikan kecil:
-
-- Tambahkan flag CLI (indeks kamera, nonaktifkan auto-open, template URL)
-- Simpan QR yang sudah dipindai ke file atau database
-- Tambahkan antarmuka GUI untuk menerima/menolak membuka URL
-
 ## Lisensi
 
 MIT — gunakan sesuai kebutuhan.
-
----
-
-Jika Anda mau, saya bisa:
-
-- Menambahkan opsi CLI (argparse) untuk template URL dan indeks kamera
-- Menambahkan skrip pengujian kecil atau workflow CI
-
-Saya akan melanjutkan dengan pemeriksaan sintaks untuk `pingscan.py`.
